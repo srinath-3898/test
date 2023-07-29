@@ -1,47 +1,72 @@
-// console.dir(document);
-// console.log(document.URL);
-// console.log(document.title);
-// console.log(document.doctype);
-// console.log(document.head);
-// console.log(document.body);
-// console.log(document.forms);
-// console.log(document.images);
+var form = document.getElementById("addForm");
+var itemList = document.getElementById("items");
+var filter = document.getElementById("filter");
 
-//GET ELEMENT BY ID
+// Form submit event
+form.addEventListener("submit", addItem);
+// Delete event
+itemList.addEventListener("click", removeItem);
+// Filter event
+filter.addEventListener("keyup", filterItems);
 
-// let headerTitle = document.getElementById("header-title");
-// let header = document.getElementById("main-header");
-// console.log(headerTitle);
-// // console.log(headerTitle.textContent);
-// // console.log(headerTitle.innerText);
-// // headerTitle.textContent = "Hello";
-// // headerTitle.innerText = "Good bye";
-// // headerTitle.innerHTML = "<h3>Hello</h3>";
-// header.style.borderBottom = "3px solid #000";
+// Add item
+function addItem(e) {
+  e.preventDefault();
 
-// const itemList = document.getElementById("items");
+  // Get input value
+  var newItem = document.getElementById("item").value;
 
-// const listItems = itemList.querySelectorAll("li");
+  // Create new li element
+  var li = document.createElement("li");
+  // Add class
+  li.className = "list-group-item";
+  // Add text node with input value
+  li.appendChild(document.createTextNode(newItem));
 
-// for (const li of listItems) {
-//   li.style.backgroundColor = "lightblue";
-// }
-// listItems[1].style.backgroundColor = "green";
-// listItems[2].style.display = "none";
+  // Create del button element
+  var deleteBtn = document.createElement("button");
 
-// const newListItem = document.createElement("li");
-// newListItem.textContent = "New Item";
+  // Add classes to del button
+  deleteBtn.className = "btn btn-danger btn-sm float-right delete";
 
-// itemList.appendChild(newListItem);
-// let items = document.getElementsByClassName("list-group");
-// for (let i = 0; i < items[0].children.length; i++) {
-//   items[0].children[i].style.backgroundColor = "white";
-// }
+  // Append text node
+  deleteBtn.appendChild(document.createTextNode("X"));
 
-var itemList = document.querySelector("#items");
-// itemList.parentElement.style.backgroundColor = "#f4f4f4";
-// console.log(itemList.parentElement.parentElement.parentElement);
-// let lastChild = itemList.lastElementChild;
-// lastChild.textContent = "Hello last child";
-console.log(itemList.nextElementSibling);
-console.log(itemList.previousElementSibling);
+  // Append button to li
+  li.appendChild(deleteBtn);
+
+  let editBtn = document.createElement("button");
+  editBtn.className = "btn btn-sm float-right delete mr-2";
+  editBtn.appendChild(document.createTextNode("Edit"));
+  li.appendChild(editBtn);
+
+  // Append li to list
+  itemList.appendChild(li);
+}
+
+// Remove item
+function removeItem(e) {
+  if (e.target.classList.contains("delete")) {
+    if (confirm("Are You Sure?")) {
+      var li = e.target.parentElement;
+      itemList.removeChild(li);
+    }
+  }
+}
+
+// Filter Items
+function filterItems(e) {
+  // convert text to lowercase
+  var text = e.target.value.toLowerCase();
+  // Get lis
+  var items = itemList.getElementsByTagName("li");
+  // Convert to an array
+  Array.from(items).forEach(function (item) {
+    var itemName = item.firstChild.textContent;
+    if (itemName.toLowerCase().indexOf(text) != -1) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
