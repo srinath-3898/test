@@ -26,6 +26,8 @@ const listItems = itemList.querySelectorAll("li");
 for (const li of listItems) {
   li.style.backgroundColor = "lightblue";
 }
+listItems[1].style.backgroundColor = "green";
+listItems[2].style.display = "none";
 
 const newListItem = document.createElement("li");
 newListItem.textContent = "New Item";
