@@ -63,7 +63,12 @@ function filterItems(e) {
   // Convert to an array
   Array.from(items).forEach(function (item) {
     var itemName = item.firstChild.textContent;
-    if (itemName.toLowerCase().indexOf(text) != -1) {
+    let itemDescription = item.children[2].textContent;
+    console.log(itemDescription.split(" ").join(""));
+    if (
+      itemName.toLowerCase().indexOf(text) != -1 ||
+      itemDescription.toLocaleLowerCase().indexOf(text) !== -1
+    ) {
       item.style.display = "block";
     } else {
       item.style.display = "none";
