@@ -19,4 +19,15 @@
 // // headerTitle.innerHTML = "<h3>Hello</h3>";
 // header.style.borderBottom = "3px solid #000";
 
-let items = document.getElementsByClassName("list-group");
+const itemList = document.getElementById("items");
+
+const listItems = itemList.querySelectorAll("li");
+
+for (const li of listItems) {
+  li.style.backgroundColor = "lightblue";
+}
+
+const newListItem = document.createElement("li");
+newListItem.textContent = "New Item";
+
+itemList.appendChild(newListItem);
