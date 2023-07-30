@@ -1,47 +1,38 @@
 var form = document.getElementById("addForm");
-var itemList = document.getElementById("items");
-var filter = document.getElementById("filter");
+var usersList = document.getElementById("users");
 
 // Form submit event
-form.addEventListener("submit", addItem);
+form.addEventListener("submit", addUser);
 // Delete event
-itemList.addEventListener("click", removeItem);
+users.addEventListener("click", removeItem);
 // Filter event
-filter.addEventListener("keyup", filterItems);
 
 // Add item
-function addItem(e) {
+function addUser(e) {
   e.preventDefault();
-
-  // Get input value
-  var newItem = document.getElementById("item").value;
-
-  // Create new li element
+  var name = document.getElementById("name").value;
+  let email = document.getElementById("email").value;
   var li = document.createElement("li");
-  // Add class
   li.className = "list-group-item";
-  // Add text node with input value
-  li.appendChild(document.createTextNode(newItem));
-
-  // Create del button element
+  li.innerHTML = `<div><p>${name}</p><p>${email}</p></div>`;
   var deleteBtn = document.createElement("button");
-
-  // Add classes to del button
   deleteBtn.className = "btn btn-danger btn-sm float-right delete";
-
-  // Append text node
   deleteBtn.appendChild(document.createTextNode("X"));
-
-  // Append button to li
   li.appendChild(deleteBtn);
-
   let editBtn = document.createElement("button");
   editBtn.className = "btn btn-sm float-right delete mr-2";
   editBtn.appendChild(document.createTextNode("Edit"));
   li.appendChild(editBtn);
-
-  // Append li to list
-  itemList.appendChild(li);
+  const users = JSON.parse(localStorage.getItem("users"));
+  if (users) {
+    users.push({ name, email });
+    localStorage.setItem("users", JSON.stringify(users));
+  } else {
+    const users = new Array();
+    users.push({ name, email });
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+  usersList.appendChild(li);
 }
 
 // Remove item
@@ -75,3 +66,8 @@ function filterItems(e) {
     }
   });
 }
+function getUsers() {
+  console.log(localStorage.getItem("users"));
+}
+
+document.addEventListener("DOMContentLoaded", getUsers);
