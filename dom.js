@@ -4,7 +4,6 @@ var usersList = document.getElementById("users");
 // Form submit event
 form.addEventListener("submit", addUser);
 // Delete event
-users.addEventListener("click", removeItem);
 // Filter event
 
 // Add item
@@ -17,10 +16,12 @@ function addUser(e) {
   li.innerHTML = `<div><p>${name}</p><p>${email}</p></div>`;
   var deleteBtn = document.createElement("button");
   deleteBtn.className = "btn btn-danger btn-sm float-right delete";
+  deleteBtn.addEventListener("click", removeItem);
   deleteBtn.appendChild(document.createTextNode("X"));
   li.appendChild(deleteBtn);
   let editBtn = document.createElement("button");
-  editBtn.className = "btn btn-sm float-right delete mr-2";
+  editBtn.className = "btn btn-sm float-right edit mr-2";
+  editBtn.addEventListener("click", editUser);
   editBtn.appendChild(document.createTextNode("Edit"));
   li.appendChild(editBtn);
   const users = JSON.parse(localStorage.getItem("users"));
@@ -41,10 +42,8 @@ function removeItem(e) {
     if (confirm("Are You Sure?")) {
       var li = e.target.parentElement;
       let name = li.children[0].children[0].textContent;
-      console.log(typeof name);
       let users = JSON.parse(localStorage.getItem("users"));
       users = users.filter((user) => {
-        console.log(user);
         if (user.name !== name) {
           return user;
         }
@@ -56,6 +55,30 @@ function removeItem(e) {
       }
       usersList.removeChild(li);
     }
+  }
+}
+
+function editUser(e) {
+  if (e.target.classList.contains("edit")) {
+    var li = e.target.parentElement;
+    let name = li.children[0].children[0].textContent;
+    let email = li.children[0].children[1].textContent;
+    let nameInput = document.getElementById("name");
+    nameInput.value = name;
+    let emailInput = document.getElementById("email");
+    emailInput.value = email;
+    let users = JSON.parse(localStorage.getItem("users"));
+    users = users.filter((user) => {
+      if (user.name !== name) {
+        return user;
+      }
+    });
+    if (users.length === 0) {
+      localStorage.removeItem("users");
+    } else {
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+    usersList.removeChild(li);
   }
 }
 
