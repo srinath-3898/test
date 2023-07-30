@@ -25,11 +25,11 @@ function addUser(e) {
   li.appendChild(editBtn);
   const users = JSON.parse(localStorage.getItem("users"));
   if (users) {
-    users.push({ name, email });
+    users.push({ name, email, id: users.length });
     localStorage.setItem("users", JSON.stringify(users));
   } else {
     const users = new Array();
-    users.push({ name, email });
+    users.push({ name, email, id: 1 });
     localStorage.setItem("users", JSON.stringify(users));
   }
   usersList.appendChild(li);
@@ -40,7 +40,21 @@ function removeItem(e) {
   if (e.target.classList.contains("delete")) {
     if (confirm("Are You Sure?")) {
       var li = e.target.parentElement;
-      itemList.removeChild(li);
+      let name = li.children[0].children[0].textContent;
+      console.log(typeof name);
+      let users = JSON.parse(localStorage.getItem("users"));
+      users = users.filter((user) => {
+        console.log(user);
+        if (user.name !== name) {
+          return user;
+        }
+      });
+      if (users.length === 0) {
+        localStorage.removeItem("users");
+      } else {
+        localStorage.setItem("users", JSON.stringify(users));
+      }
+      usersList.removeChild(li);
     }
   }
 }
@@ -66,8 +80,6 @@ function filterItems(e) {
     }
   });
 }
-function getUsers() {
-  console.log(localStorage.getItem("users"));
-}
+function getUsers() {}
 
 document.addEventListener("DOMContentLoaded", getUsers);
